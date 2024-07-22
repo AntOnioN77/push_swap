@@ -6,20 +6,13 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:54:36 by antofern          #+#    #+#             */
-/*   Updated: 2024/07/22 13:25:03 by antofern         ###   ########.fr       */
+/*   Updated: 2024/07/22 13:49:29 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "circularArray.h"
 #include <stddef.h>
 
-//según está solo vale para iniciar la pila a desde 0
-/*static void	addinit(t_ciar *arr, int elem)
-{
-	arr->buff[arr->fill] = elem;
-	arr->fill++;
-}
-*/
 t_ciar	*init_ciar(int items)
 {
 	t_ciar	*ciar;
@@ -129,10 +122,84 @@ void push(t_ciar *from, t_ciar *to)
 	pop(from);
 }
 
+// -------ORDENAES PARA LA ORDENACION-------
+
+void sa(t_ciar *a)
+{
+	swap(a);
+	//ft_printf(sa);
+}
+
+void sa(t_ciar *b)
+{
+	swap(b);
+	//ft_printf(sb);
+}
+
+void	ss(t_ciar a, t_ciar b)
+{
+	swap(a);
+	swap(b);
+	//ft_printf(ss);
+}
+
+void	pa(t_ciar *b, t_ciar *a)
+{
+	push(b, a);
+	//ft_printf(pa);
+}
+
+void	pb(t_ciar *a, t_ciar *b)
+{
+	push(a, b);
+	//ft_printf(pb);
+}
+
+void	ra(t_ciar *a)
+{
+	rotate(a);
+	//ft_printf(ra);
+}
+
+void	rb(t_ciar *b)
+{
+	rotate(b);
+	//ft_printf(rb);
+}
+
+void	rr(t_ciar *a, t_ciar *b)
+{
+	rotate(a);
+	rotate(b);
+	//ft_printf(rr);
+}
+
+void	rra(t_ciar *a)
+{
+	reverse_rotate(a);
+	//ft_printf(rra);
+}
+
+void	rrb(t_ciar *b)
+{
+	reverse_rotate(b);
+	//ft_printf(rrb);
+}
+
+
+void	rrr(t_ciar *a, t_ciar *b)
+{
+	reverse_rotate(a);
+	reverse_rotate(b);
+	//ft_printf(rrr);
+}
+
+// -------------------PUSH_SWAP---------------------
 int	fill_stack(t_ciar *arr, int argc, char **argv)
 {
 	//
 }
+
 
 int	main(int argc, char **argv)
 {
