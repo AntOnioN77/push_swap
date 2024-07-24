@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:54:36 by antofern          #+#    #+#             */
-/*   Updated: 2024/07/22 13:49:29 by antofern         ###   ########.fr       */
+/*   Updated: 2024/07/23 10:52:27 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void push(t_ciar *from, t_ciar *to)
 	pop(from);
 }
 
-// -------ORDENAES PARA LA ORDENACION-------
+// -------ORDENES PARA LA ORDENACION-------
 
 void sa(t_ciar *a)
 {
@@ -136,7 +136,7 @@ void sa(t_ciar *b)
 	//ft_printf(sb);
 }
 
-void	ss(t_ciar a, t_ciar b)
+void	ss(t_ciar *a, t_ciar *b)
 {
 	swap(a);
 	swap(b);
@@ -195,11 +195,27 @@ void	rrr(t_ciar *a, t_ciar *b)
 }
 
 // -------------------PUSH_SWAP---------------------
-int	fill_stack(t_ciar *arr, int argc, char **argv)
+
+int fill_stack(t_ciar *arr, int argc, char **argv)
 {
-	//
+	int i;
+	int num;
+	
+	i = argc - 1;
+	while (i > 0)
+	{
+		num = atoi(argv[i]); // CIDADO!! NO FT_-------------------------------------------------------
+		add(arr, num);
+		i--;
+	}
+	return OK;
 }
 
+short_stack(t_ciar *a, t_ciar *b)
+{
+	// elegir un algoritmo u otro para segun que cantidad de elementos
+
+}
 
 int	main(int argc, char **argv)
 {
@@ -212,4 +228,5 @@ int	main(int argc, char **argv)
 	stack_b = init_ciar(argc - 1);
 	fill_stack(stack_a, argc, argv);
 	short_stack(stack_a, stack_b);
+	
 }
