@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:01:26 by antofern          #+#    #+#             */
-/*   Updated: 2024/07/24 17:15:12 by antofern         ###   ########.fr       */
+/*   Updated: 2024/08/01 14:02:55 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,26 +17,14 @@ typedef struct s_ciar
 	int	back;
 	int	slots;
 	int	fill;
+	int max_fill;
 }	t_ciar;
 #define ERROR 1
 #define OK 0
 #define EMPTY_STACK -1
 #define FULL_STACK -2 //no debería ser posible
 
-
-
-#define MAX_OPERATIONS 5 // Ajusta según sea necesario
-
-typedef enum {
-    SA, SB, SS, PA, PB, RA, RB, RR, RRA, RRB, RRR
-} Operation;
-
-typedef struct {
-    Operation ops[MAX_OPERATIONS];
-    int count;
-} Solution;
-
-
+t_ciar	*init_ciar(int items);
 int next_index(int index, int slots);
 int prev_index(int index, int slots);
 int get_top(t_ciar *stack);
@@ -59,12 +47,5 @@ void rra(t_ciar *a);
 void rrb(t_ciar *b);
 void rrr(t_ciar *a, t_ciar *b);
 int fill_stack(t_ciar *arr, int argc, char **argv);
-int *ordenar_indices_por_contenido(t_ciar *arr);
-void apply_operation(t_ciar *a, t_ciar *b, Operation op);
-void undo_operation(t_ciar *a, t_ciar *b, Operation op);
-int is_sorted(t_ciar *a);
-void copy_solution(Solution *dest, Solution *src);
-int backtrack(t_ciar *a, t_ciar *b, Solution *current, Solution *best, int depth);
-Solution find_shortest_solution(t_ciar *a);
-const char* operation_to_string(Operation op);
-void print_solution(Solution *solution);
+void	free_ciar(t_ciar *arr);
+int get_level(t_ciar *arr, int index);
