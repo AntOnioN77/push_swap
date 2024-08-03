@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:54:36 by antofern          #+#    #+#             */
-/*   Updated: 2024/08/01 17:36:06 by antofern         ###   ########.fr       */
+/*   Updated: 2024/08/03 09:04:03 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,21 +127,24 @@ int	reverse_rotate(t_ciar *arr)
 	return (OK);
 }
 
-void swap(t_ciar *arr)// requiere % arr->slots en algún punto
+int swap(t_ciar *arr)// requiere % arr->slots en algún punto
 {
 	int	tmp;
 
 	if (arr->fill < 2)
-		return ;
+		return (ERROR);
 	tmp = get_top(arr);
 	arr->buff[arr->top] = arr->buff[next_index(arr->top, arr->slots)];
 	arr->buff[next_index(arr->top, arr->slots)] = tmp;
+	return (0);
 }
 
-void push(t_ciar *from, t_ciar *to)
+int push(t_ciar *from, t_ciar *to)
 {
 	if (from->fill < 1)
-		return ;
+		return (ERROR);
+	if (to->max_fill == to->fill);
+		return (ERROR);
 	add(to, get_top(from));
 	pop(from);
 }
@@ -149,75 +152,123 @@ void push(t_ciar *from, t_ciar *to)
 
 // -------ORDENES PARA LA ORDENACION-------
 
+// !!!!!!!!!! CARGARSE printf, poner FT_printf
+
 void sa(t_ciar *a)
 {
 	if (a == NULL)
 		return;
-	swap(a);
+	if (swap(a) == ERROR)
+		return;
 	printf("sa");
 }
 
 void sb(t_ciar *b)
 {
-	swap(b);
+	if (b == NULL)
+		return;
+	if (swap(b) == ERROR)
+		return;
 	printf("sb");
 }
 
 void	ss(t_ciar *a, t_ciar *b)
 {
+	if (a == NULL)
+		return;
+	if (b == NULL)
+		return;
+	if (swap(a) == ERROR)
+		return;
+	if (swap(b) == ERROR)
+	{
 	swap(a);
-	swap(b);
+	return ;
+	}
 	printf("ss");
 }
 
 void	pa(t_ciar *b, t_ciar *a)
 {
-	push(b, a);
+
+	if (push(b, a) == ERROR)
+		return ;
 	printf("pa\n");
 }
 
 void	pb(t_ciar *a, t_ciar *b)
 {
-	push(a, b);
+	if (push(a, b) == ERROR)
+		return ;
 	printf("pb\n");/////////prueba
 }
 
 void	ra(t_ciar *a)
 {
-	rotate(a);
+	if (a == NULL)
+		return ;
+	if (rotate(a) == ERROR)
+		return;
 	printf("ra\n");
 }
 
 void	rb(t_ciar *b)
 {
-	rotate(b);
+	if (b == NULL)
+		return;
+	if (rotate(b) == ERROR)
+		return;
 	printf("rb\n");
 }
 
 void	rr(t_ciar *a, t_ciar *b)
 {
-	rotate(a);
-	rotate(b);
+	if (a == NULL)
+		return;
+	if (b == NULL)
+		return;
+	if (rotate(a) == ERROR)
+		return;
+	if (rotate(b) == ERROR)
+	{
+	reverse_rotate(a);
+	return ;
+	}
 	printf("rr\n");
 }
 
 void	rra(t_ciar *a)
 {
-	reverse_rotate(a);
+	if (a == NULL)
+		return ;
+	if (reverse_rotate(a) == ERROR)
+		return ;
 	printf("rra\n");
 }
 
 void	rrb(t_ciar *b)
 {
-	reverse_rotate(b);
+	if (b == NULL)
+		return ;
+	if (reverse_rotate(b) == ERROR)
+		return ;
 	printf("rrb\n");
 }
 
 
 void	rrr(t_ciar *a, t_ciar *b)
 {
-	reverse_rotate(a);
-	reverse_rotate(b);
+	if (a == NULL)
+		return ;
+	if (b == NULL)
+		return ;
+	if (reverse_rotate(a) == ERROR)
+		return ;
+	if (reverse_rotate(b) == ERROR)
+	{
+	rotate(a);
+	return ;
+	}
 	printf("rrr\n");
 }
 
@@ -245,22 +296,11 @@ int fill_stack(t_ciar *arr, int argc, char **argv)
 	}
 	return OK;
 }
-void print_status(t_ciar *stack_a, t_ciar *stack_b)
-{
-	printf("PILA_A back:%d, top:%d\n", stack_a->back, stack_a->top );
-	printf("%d", stack_a->buff[0]);
-	printf("%d", stack_a->buff[1]);
-	printf("%d", stack_a->buff[2]);
-	printf("%d", stack_a->buff[3]);
-	printf("%d\n", stack_a->buff[4]);
 
-	printf("PILA_B back:%d, top:%d\n", stack_a->back, stack_a->top );
-	printf("%d", stack_b->buff[0]);
-	printf("%d", stack_b->buff[1]);
-	printf("%d", stack_b->buff[2]);
-	printf("%d", stack_b->buff[3]);
-	printf("%d\n", stack_b->buff[4]);
-}
+
+// _______________________ Metodos de ordenación____________________
+
+
 
 int	main(int argc, char **argv)
 {
@@ -273,16 +313,7 @@ int	main(int argc, char **argv)
 	stack_a = init_ciar(argc - 1);
 	stack_b = init_ciar(argc - 1);
 	fill_stack(stack_a, argc, argv);
-printf ("inicio");
-	print_status(stack_a, stack_b);
-	ra(stack_a);
-	ra(stack_a);
-	pb(stack_a, stack_b);
-	ra(stack_a);
-	pa(stack_b, stack_a);
-	ra(stack_a);
-printf ("fin");
-	print_status(stack_a, stack_b);
-	//short_stack(stack_a, stack_b);
+	//print_status(stack_a, stack_b);
+	sort_stack(stack_a, stack_b);
 	return (0);
 }
