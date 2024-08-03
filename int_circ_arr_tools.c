@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:54:36 by antofern          #+#    #+#             */
-/*   Updated: 2024/08/03 09:04:03 by antofern         ###   ########.fr       */
+/*   Updated: 2024/08/03 12:16:50 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,14 @@ inline int prev_index(int index, int slots)
 	return ((index - 1 + slots) % slots);
 }
 
-inline int get_top(t_ciar *stack)
+int get_top(t_ciar *stack)
 {
 	if (stack->fill == 0)
 			return (0);
 	return (stack->buff[stack->top]);
 }
 
-inline int get_back(t_ciar *stack)
+int get_back(t_ciar *stack)
 {
 	if (stack->fill == 0)
 			return (0);
@@ -85,7 +85,6 @@ int	pop(t_ciar *arr)
 {
 	if (arr->fill > 0)
 	{
-		arr->buff[arr->top] = 0; // SOLO PARA PRUEBA
 		arr->top = next_index(arr->top, arr->slots);
 		arr->fill--;
 		if (arr->fill == 0)
@@ -151,6 +150,7 @@ int push(t_ciar *from, t_ciar *to)
 
 
 // -------ORDENES PARA LA ORDENACION-------
+
 
 // !!!!!!!!!! CARGARSE printf, poner FT_printf
 
@@ -296,10 +296,82 @@ int fill_stack(t_ciar *arr, int argc, char **argv)
 	}
 	return OK;
 }
-
+//________________________ consulta de posiciones____________________
+inline int get_undertop(t_ciar *arr)
+{
+	return (arr->buff[next_index(arr->top, arr->slots)]);
+}
 
 // _______________________ Metodos de ordenación____________________
 
+int shorter_d(t_ciar *a, t_ciar *b)
+{
+	int chunk_size;
+	int i;
+
+	chunk_size = sqrt(a->fill);
+
+	pb(a, b);
+	while (i < chunk_size)
+		pyramid_step(a, b);
+	while (a->fill > 0)
+		doblebuble_step(a,b);
+	
+	return (0);
+}
+
+pyramid_step(t_ciar *a, t_ciar *b)
+{
+	swap_up_down(a, b);
+	if (a->fill > 1 && get_top(a) > get_back(a))
+	{
+		ra(a);
+		return ;
+	}
+	if (a->fill > 0 && b->fill > 0)
+	{
+		if (get_top(a) > get_top(b))
+		{
+			pb(a, b);
+			return ;
+		}
+		if (get_top(a) < get_back(b))
+		{
+			pb(a, b);
+			rb(b);
+			return ;
+		}
+	}
+}
+/*
+	else if (nada de lo anterior) , {pb, pb, rb} //coloca el mas pequeño de los dos en b_top y el mas grande en b_back
+*/
+
+void swap_up_down(t_ciar *a, t_ciar *b)
+{
+	int a_top;
+	int b_top;
+	int a_undertop;
+	int b_undertop;
+
+	a_top = get_top(a);
+	b_top = get_top(b);
+	a_undertop = get_undertop(a);
+	b_undertop = get_undertop(b);
+
+	if (a->fill > 1 && b->fill > 1
+	&& a_top > a_undertop && b_top < b_undertop)
+		ss(a, b);
+	if (a->fill > 1 && a_top > a_undertop)
+		sa;
+	if (b->fill > 1 && b_top < b_undertop)
+		sb;
+}
+
+doblebuble_step(t_ciar *a, t_ciar *b)
+{
+
+}
 
 
 int	main(int argc, char **argv)
@@ -314,6 +386,6 @@ int	main(int argc, char **argv)
 	stack_b = init_ciar(argc - 1);
 	fill_stack(stack_a, argc, argv);
 	//print_status(stack_a, stack_b);
-	sort_stack(stack_a, stack_b);
+	shorter_d(stack_a, stack_b);
 	return (0);
 }

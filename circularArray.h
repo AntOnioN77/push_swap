@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:01:26 by antofern          #+#    #+#             */
-/*   Updated: 2024/08/01 14:02:55 by antofern         ###   ########.fr       */
+/*   Updated: 2024/08/03 09:46:07 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ int pop(t_ciar *arr);
 int add(t_ciar *arr, int elem);
 int rotate(t_ciar *arr);
 int reverse_rotate(t_ciar *arr);
-void swap(t_ciar *arr);
-void push(t_ciar *from, t_ciar *to);
+int swap(t_ciar *arr);
+int push(t_ciar *from, t_ciar *to);
 void sa(t_ciar *a);
 void sb(t_ciar *b);
 void ss(t_ciar *a, t_ciar *b);
