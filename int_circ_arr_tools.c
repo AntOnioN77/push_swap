@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:54:36 by antofern          #+#    #+#             */
-/*   Updated: 2024/08/03 12:16:50 by antofern         ###   ########.fr       */
+/*   Updated: 2024/08/03 12:45:19 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -311,7 +311,6 @@ int shorter_d(t_ciar *a, t_ciar *b)
 
 	chunk_size = sqrt(a->fill);
 
-	pb(a, b);
 	while (i < chunk_size)
 		pyramid_step(a, b);
 	while (a->fill > 0)
@@ -320,33 +319,7 @@ int shorter_d(t_ciar *a, t_ciar *b)
 	return (0);
 }
 
-pyramid_step(t_ciar *a, t_ciar *b)
-{
-	swap_up_down(a, b);
-	if (a->fill > 1 && get_top(a) > get_back(a))
-	{
-		ra(a);
-		return ;
-	}
-	if (a->fill > 0 && b->fill > 0)
-	{
-		if (get_top(a) > get_top(b))
-		{
-			pb(a, b);
-			return ;
-		}
-		if (get_top(a) < get_back(b))
-		{
-			pb(a, b);
-			rb(b);
-			return ;
-		}
-	}
-}
-/*
-	else if (nada de lo anterior) , {pb, pb, rb} //coloca el mas pequeño de los dos en b_top y el mas grande en b_back
-*/
-
+//_____ordenacion 1 nivel mas bajo 
 void swap_up_down(t_ciar *a, t_ciar *b)
 {
 	int a_top;
@@ -368,11 +341,81 @@ void swap_up_down(t_ciar *a, t_ciar *b)
 		sb;
 }
 
+int rotate_up_down(t_ciar *a, t_ciar *b)
+{
+	int a_top;
+	int b_top;
+	int a_back;
+	int b_back;
+
+	a_top = get_top(a);
+	b_top = get_top(b);
+	a_back = get_back(a);
+	b_back = get_back(b);
+
+	if (a->fill > 1 && b->fill > 1
+	&& a_top > a_back && b_top < b_back)
+		ss(a, b);
+	if (a->fill > 1 && a_top > a_back)
+		sa;
+	if (b->fill > 1 && b_top < b_back)
+		sb;
+}
+
+// ________ordenacion 2 STEPS
+pyramid_step(t_ciar *a, t_ciar *b)
+{
+	swap_up_down(a, b);
+	if (rotate_up_down(a,b))
+		return ;
+	pb(a, b);
+	/*
+	if (a->fill > 1 && get_top(a) > get_back(a))
+	{
+		ra(a);
+		return ;
+	}*/
+
+
+	/*	if (a->fill > 0 && b->fill > 0)
+	{
+		if (get_top(a) > get_top(b))
+		{
+			pb(a, b);
+			return ;
+		}
+		if (get_top(a) < get_back(b))
+		{
+			pb(a, b);
+			rb(b);
+			return ;
+		}*/
+}
+/*
+	else if (nada de lo anterior) , {pb, pb, rb} //coloca el mas pequeño de los dos en b_top y el mas grande en b_back
+*/
+
 doblebuble_step(t_ciar *a, t_ciar *b)
 {
 
 }
 
+// _____________ ordenacion 3 Prototipos ejecutables
+
+int shorter_d(t_ciar *a, t_ciar *b)
+{
+	int chunk_size;
+	int i;
+
+	chunk_size = sqrt(a->fill);
+
+	while (i < chunk_size)
+		pyramid_step(a, b);
+	while (a->fill > 0)
+		doblebuble_step(a,b);
+	
+	return (0);
+}
 
 int	main(int argc, char **argv)
 {
