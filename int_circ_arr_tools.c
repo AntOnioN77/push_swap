@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:54:36 by antofern          #+#    #+#             */
-/*   Updated: 2024/08/03 12:45:19 by antofern         ###   ########.fr       */
+/*   Updated: 2024/08/03 16:32:02 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <limits.h>
+#include <math.h> // BORRAR (crear funcion)
+
 
 
 t_ciar	*init_ciar(int items)
@@ -142,10 +144,11 @@ int push(t_ciar *from, t_ciar *to)
 {
 	if (from->fill < 1)
 		return (ERROR);
-	if (to->max_fill == to->fill);
+	if (to->max_fill == to->fill)
 		return (ERROR);
 	add(to, get_top(from));
 	pop(from);
+	return (0);
 }
 
 
@@ -160,7 +163,7 @@ void sa(t_ciar *a)
 		return;
 	if (swap(a) == ERROR)
 		return;
-	printf("sa");
+	printf("sa\n");
 }
 
 void sb(t_ciar *b)
@@ -169,7 +172,7 @@ void sb(t_ciar *b)
 		return;
 	if (swap(b) == ERROR)
 		return;
-	printf("sb");
+	printf("sb\n");
 }
 
 void	ss(t_ciar *a, t_ciar *b)
@@ -185,7 +188,7 @@ void	ss(t_ciar *a, t_ciar *b)
 	swap(a);
 	return ;
 	}
-	printf("ss");
+	printf("ss\n");
 }
 
 void	pa(t_ciar *b, t_ciar *a)
@@ -297,29 +300,14 @@ int fill_stack(t_ciar *arr, int argc, char **argv)
 	return OK;
 }
 //________________________ consulta de posiciones____________________
-inline int get_undertop(t_ciar *arr)
+int get_undertop(t_ciar *arr)
 {
 	return (arr->buff[next_index(arr->top, arr->slots)]);
 }
 
 // _______________________ Metodos de ordenación____________________
 
-int shorter_d(t_ciar *a, t_ciar *b)
-{
-	int chunk_size;
-	int i;
-
-	chunk_size = sqrt(a->fill);
-
-	while (i < chunk_size)
-		pyramid_step(a, b);
-	while (a->fill > 0)
-		doblebuble_step(a,b);
-	
-	return (0);
-}
-
-//_____ordenacion 1 nivel mas bajo 
+//_____ordenacion 1. Nivel mas bajo 
 void swap_up_down(t_ciar *a, t_ciar *b)
 {
 	int a_top;
@@ -334,11 +322,14 @@ void swap_up_down(t_ciar *a, t_ciar *b)
 
 	if (a->fill > 1 && b->fill > 1
 	&& a_top > a_undertop && b_top < b_undertop)
+	{
 		ss(a, b);
+		return ;
+	}
 	if (a->fill > 1 && a_top > a_undertop)
-		sa;
+		sa(a);
 	if (b->fill > 1 && b_top < b_undertop)
-		sb;
+		sb(b);
 }
 
 int rotate_up_down(t_ciar *a, t_ciar *b)
@@ -355,52 +346,55 @@ int rotate_up_down(t_ciar *a, t_ciar *b)
 
 	if (a->fill > 1 && b->fill > 1
 	&& a_top > a_back && b_top < b_back)
-		ss(a, b);
+		{
+			rr(a, b);
+			return (1);
+		}
 	if (a->fill > 1 && a_top > a_back)
-		sa;
+		{
+			ra(a);
+			return (1);
+		}
 	if (b->fill > 1 && b_top < b_back)
-		sb;
+	{
+		rb(b);
+		return (1);
+	}
+	return (0);
 }
 
-// ________ordenacion 2 STEPS
-pyramid_step(t_ciar *a, t_ciar *b)
+// ________ordenacion 2. Steps
+void pyramid_step(t_ciar *a, t_ciar *b)
 {
+	static int cicle = 0;
+	if (get_back(a) < get_top(a))
+	{
+		rra(a);
+		sa(a);
+		ra(a);
+	}
 	swap_up_down(a, b);
 	if (rotate_up_down(a,b))
 		return ;
-	pb(a, b);
-	/*
-	if (a->fill > 1 && get_top(a) > get_back(a))
+	if (cicle == 0)
+	{
+		pb(a, b);
+		cicle = 1;
+	}
+	else
 	{
 		ra(a);
-		return ;
-	}*/
-
-
-	/*	if (a->fill > 0 && b->fill > 0)
-	{
-		if (get_top(a) > get_top(b))
-		{
-			pb(a, b);
-			return ;
-		}
-		if (get_top(a) < get_back(b))
-		{
-			pb(a, b);
-			rb(b);
-			return ;
-		}*/
+		cicle = 0;
+	}
 }
-/*
-	else if (nada de lo anterior) , {pb, pb, rb} //coloca el mas pequeño de los dos en b_top y el mas grande en b_back
-*/
 
-doblebuble_step(t_ciar *a, t_ciar *b)
+
+void doblebuble_step(t_ciar *a, t_ciar *b)
 {
 
 }
 
-// _____________ ordenacion 3 Prototipos ejecutables
+// _____________ ordenacion 3. Prototipos ejecutables
 
 int shorter_d(t_ciar *a, t_ciar *b)
 {
@@ -409,10 +403,11 @@ int shorter_d(t_ciar *a, t_ciar *b)
 
 	chunk_size = sqrt(a->fill);
 
-	while (i < chunk_size)
+	i = 0;
+	while (++i < chunk_size)
 		pyramid_step(a, b);
-	while (a->fill > 0)
-		doblebuble_step(a,b);
+//	while (a->fill > 0)
+//		doblebuble_step(a,b);
 	
 	return (0);
 }
@@ -428,7 +423,10 @@ int	main(int argc, char **argv)
 	stack_a = init_ciar(argc - 1);
 	stack_b = init_ciar(argc - 1);
 	fill_stack(stack_a, argc, argv);
-	//print_status(stack_a, stack_b);
-	shorter_d(stack_a, stack_b);
+	//shorter_d(stack_a, stack_b);
+	//int i = 0;
+	//int size = stack_a->fill;
+	while (stack_a->fill > 0)
+		pyramid_step(stack_a, stack_b);
 	return (0);
 }

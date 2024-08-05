@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:01:26 by antofern          #+#    #+#             */
-/*   Updated: 2024/08/03 09:46:07 by antofern         ###   ########.fr       */
+/*   Updated: 2024/08/03 13:21:16 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,3 +49,5 @@ void rrr(t_ciar *a, t_ciar *b);
 int fill_stack(t_ciar *arr, int argc, char **argv);
 void	free_ciar(t_ciar *arr);
 int get_level(t_ciar *arr, int index);
+
+inline int get_undertop(t_ciar *arr);
