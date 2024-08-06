@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:01:26 by antofern          #+#    #+#             */
-/*   Updated: 2024/08/03 13:21:16 by antofern         ###   ########.fr       */
+/*   Updated: 2024/08/06 16:09:21 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ typedef struct s_ciar
 #define OK 0
 #define EMPTY_STACK -1
 #define FULL_STACK -2 //no debería ser posible
+
+typedef struct s_course
+{
+	int 
+};
 
 t_ciar	*init_ciar(int items);
 int next_index(int index, int slots);
@@ -49,5 +54,3 @@ void rrr(t_ciar *a, t_ciar *b);
 int fill_stack(t_ciar *arr, int argc, char **argv);
 void	free_ciar(t_ciar *arr);
 int get_level(t_ciar *arr, int index);
-
-inline int get_undertop(t_ciar *arr);

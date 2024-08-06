@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:54:36 by antofern          #+#    #+#             */
-/*   Updated: 2024/08/03 16:32:02 by antofern         ###   ########.fr       */
+/*   Updated: 2024/08/06 16:40:51 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,102 +300,21 @@ int fill_stack(t_ciar *arr, int argc, char **argv)
 	return OK;
 }
 //________________________ consulta de posiciones____________________
-int get_undertop(t_ciar *arr)
+int get_n_element(const t_ciar *arr, int level) // retorna el valor contenido en el nºesimo elemento de la lista, considerando que el nº0 es arr->buff[arr->top]
 {
-	return (arr->buff[next_index(arr->top, arr->slots)]);
+	int indice;
+
+	if (level >= arr->fill || level < 0)
+		return (0);
+	indice = (level + arr->top) % arr->slots ;
+
+	return (arr->buff[indice]);
 }
 
 // _______________________ Metodos de ordenación____________________
 
-//_____ordenacion 1. Nivel mas bajo 
-void swap_up_down(t_ciar *a, t_ciar *b)
-{
-	int a_top;
-	int b_top;
-	int a_undertop;
-	int b_undertop;
 
-	a_top = get_top(a);
-	b_top = get_top(b);
-	a_undertop = get_undertop(a);
-	b_undertop = get_undertop(b);
-
-	if (a->fill > 1 && b->fill > 1
-	&& a_top > a_undertop && b_top < b_undertop)
-	{
-		ss(a, b);
-		return ;
-	}
-	if (a->fill > 1 && a_top > a_undertop)
-		sa(a);
-	if (b->fill > 1 && b_top < b_undertop)
-		sb(b);
-}
-
-int rotate_up_down(t_ciar *a, t_ciar *b)
-{
-	int a_top;
-	int b_top;
-	int a_back;
-	int b_back;
-
-	a_top = get_top(a);
-	b_top = get_top(b);
-	a_back = get_back(a);
-	b_back = get_back(b);
-
-	if (a->fill > 1 && b->fill > 1
-	&& a_top > a_back && b_top < b_back)
-		{
-			rr(a, b);
-			return (1);
-		}
-	if (a->fill > 1 && a_top > a_back)
-		{
-			ra(a);
-			return (1);
-		}
-	if (b->fill > 1 && b_top < b_back)
-	{
-		rb(b);
-		return (1);
-	}
-	return (0);
-}
-
-// ________ordenacion 2. Steps
-void pyramid_step(t_ciar *a, t_ciar *b)
-{
-	static int cicle = 0;
-	if (get_back(a) < get_top(a))
-	{
-		rra(a);
-		sa(a);
-		ra(a);
-	}
-	swap_up_down(a, b);
-	if (rotate_up_down(a,b))
-		return ;
-	if (cicle == 0)
-	{
-		pb(a, b);
-		cicle = 1;
-	}
-	else
-	{
-		ra(a);
-		cicle = 0;
-	}
-}
-
-
-void doblebuble_step(t_ciar *a, t_ciar *b)
-{
-
-}
-
-// _____________ ordenacion 3. Prototipos ejecutables
-
+/*
 int shorter_d(t_ciar *a, t_ciar *b)
 {
 	int chunk_size;
@@ -411,22 +330,28 @@ int shorter_d(t_ciar *a, t_ciar *b)
 	
 	return (0);
 }
+*/
 
-int	main(int argc, char **argv)
-{
-	t_ciar *stack_a;
-	t_ciar *stack_b;
-	//int *indices_ordenados;
 
-	//validar datos de entrada
 
-	stack_a = init_ciar(argc - 1);
-	stack_b = init_ciar(argc - 1);
-	fill_stack(stack_a, argc, argv);
-	//shorter_d(stack_a, stack_b);
-	//int i = 0;
-	//int size = stack_a->fill;
-	while (stack_a->fill > 0)
-		pyramid_step(stack_a, stack_b);
-	return (0);
+int main() {
+    int numeros[] = {10, 5, 8, 12, 3, 7};
+    char letra1, letra2;
+    Estado estado;
+    inicializar_estado(&estado);
+
+    bool exito = busqueda_con_arbol_decision(numeros, &letra1, &letra2, &estado);
+
+    if (exito) {
+        printf("Búsqueda exitosa. Los números más cercanos son: %c y %c\n", letra1, letra2);
+        printf("Que corresponden a los valores: %d y %d\n", 
+               numeros[letra1 - 'A'], numeros[letra2 - 'A']);
+        
+        printf("Ejecutando operaciones para %c y %c:\n", letra1, letra2);
+        ejecutar_operaciones(letra1, letra2, numeros);
+    } else {
+        printf("No se encontró un par que cumpla con los criterios del árbol de decisión.\n");
+    }
+
+    return 0;
 }
