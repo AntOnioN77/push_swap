@@ -23,9 +23,22 @@ t_level		find_place_for(t_ciar *stack_a, int n)
 run_rotate(t_place deeper , t_place higher, t_course *course)
 {
 	//to do
-	
-
-
+	course->steps = deeper.level + 1; //+1 por el pa
+	course->rr = higher.level;
+	course->rrr = 0;
+	if (deeper.stack == 'a')
+		{
+			course->ra = deeper.level - higher.level;
+			course->rb = 0;
+		}
+	if (deeper.stack == 'b')
+	{
+			course->rb = deeper.level - higher.level;
+			course->ra = 0;
+	}
+	course->rra = 0;
+	course->rrb = 0;
+	course->pa	= 1;
 
 }
 
@@ -38,6 +51,7 @@ void *synch_rotation(t_place a, t_place b, t_course *best_course)
 	t_place higher;
 	t_course this_course;
 
+	this_course.level = best_course->level;
 	if (a.level > b.level)
 	{
 		deeper = a;
@@ -49,14 +63,14 @@ void *synch_rotation(t_place a, t_place b, t_course *best_course)
 		higher = a;
 	}
 	if (higher.level <= higher.middel_of_stack) // parece buena para otro fin (&& (deeper.level - higher.level) <= deeper.middel_of_stack)
-		this_course = run_rotate();
+		run_rotate(deeper, higher, &this_course);
 	else
-		this_course = run_reverse_rotate();
+		run_reverse_rotate(deeper, higher, &this_course);
 //test borrar lineas siguientes
 	t_course course_prueba_1;
 	t_course course_prueba_2;
-	course_prueba_1 = run_rotate();
-	course_prueba_2 = run_reverse_rotate();
+	run_rotate(deeper, higher, &course_prueba_1);
+	run_reverse_rotate(deeper, higher, &course_prueba_2);
 	if (course_prueba_1.steps < course_prueba_2.steps )
 		{
 		assert(this_course.steps == course_prueba_1.steps);
@@ -67,7 +81,6 @@ void *synch_rotation(t_place a, t_place b, t_course *best_course)
 		}
 //fin test
 	if (this_course.steps < best_course->steps)
-		this_course.level = best_course
 		memcpy(best_course, &this_course, sizeof(t_course));// pasar a ft_!!!
 }
 
