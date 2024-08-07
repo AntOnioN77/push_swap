@@ -6,11 +6,11 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:54:36 by antofern          #+#    #+#             */
-/*   Updated: 2024/08/06 16:40:51 by antofern         ###   ########.fr       */
+/*   Updated: 2024/08/07 11:22:33 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "circularArray.h"
+#include "circular_array.h"
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -300,12 +300,16 @@ int fill_stack(t_ciar *arr, int argc, char **argv)
 	return OK;
 }
 //________________________ consulta de posiciones____________________
-int get_n_element(const t_ciar *arr, int level) // retorna el valor contenido en el nºesimo elemento de la lista, considerando que el nº0 es arr->buff[arr->top]
+int get_n_element(const t_ciar *arr, t_level level) // retorna el valor contenido en el nºesimo elemento de la lista, considerando que el nº0 es arr->buff[arr->top]
 {
 	int indice;
 
-	if (level >= arr->fill || level < 0)
+	if (level >= arr->fill || level <= -(arr->fill))
 		return (0);
+	if (level < 0) {
+        level = arr->fill + level;
+    }
+	
 	indice = (level + arr->top) % arr->slots ;
 
 	return (arr->buff[indice]);
@@ -334,24 +338,23 @@ int shorter_d(t_ciar *a, t_ciar *b)
 
 
 
-int main() {
-    int numeros[] = {10, 5, 8, 12, 3, 7};
-    char letra1, letra2;
-    Estado estado;
-    inicializar_estado(&estado);
 
-    bool exito = busqueda_con_arbol_decision(numeros, &letra1, &letra2, &estado);
+int	main(int argc, char **argv)
+{
+	t_ciar *stack_a;
+	t_ciar *stack_b;
 
-    if (exito) {
-        printf("Búsqueda exitosa. Los números más cercanos son: %c y %c\n", letra1, letra2);
-        printf("Que corresponden a los valores: %d y %d\n", 
-               numeros[letra1 - 'A'], numeros[letra2 - 'A']);
-        
-        printf("Ejecutando operaciones para %c y %c:\n", letra1, letra2);
-        ejecutar_operaciones(letra1, letra2, numeros);
-    } else {
-        printf("No se encontró un par que cumpla con los criterios del árbol de decisión.\n");
-    }
+	//validar datos de entrada
 
-    return 0;
+	stack_a = init_ciar(argc - 1);
+	stack_b = init_ciar(argc - 1);
+	fill_stack(stack_a, argc, argv);
+
+	//ra(stack_a);
+	//ra(stack_a);
+	//ra(stack_a);
+
+	printf("%d\n", get_n_element(stack_a, -1));
+
+	return (0);
 }
