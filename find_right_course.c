@@ -1,3 +1,5 @@
+#include <assert.h> //borrar, es de prueba
+
 
 
 #include "circular_array.h"
@@ -18,43 +20,73 @@ t_level		find_place_for(t_ciar *stack_a, int n)
 	}
 }
 
-t_course *synch_rotation(stack_a, stack_b, target_a, level_b)
+run_rotate(t_place deeper , t_place higher, t_course *course)
 {
-	t_course *with_rr;
-	t_course *whit_rrr;
-
+	//to do
 	
+
+
+
+}
+
+run_reverse_rotate()
+{}
+
+void *synch_rotation(t_place a, t_place b, t_course *best_course)
+{
+	t_place deeper;
+	t_place higher;
+	t_course this_course;
+
+	if (a.level > b.level)
+	{
+		deeper = a;
+		higher = b;
+	}
+	else
+	{
+		deeper = b;
+		higher = a;
+	}
+	if (higher.level <= higher.middel_of_stack) // parece buena para otro fin (&& (deeper.level - higher.level) <= deeper.middel_of_stack)
+		this_course = run_rotate();
+	else
+		this_course = run_reverse_rotate();
+//test borrar lineas siguientes
+	t_course course_prueba_1;
+	t_course course_prueba_2;
+	course_prueba_1 = run_rotate();
+	course_prueba_2 = run_reverse_rotate();
+	if (course_prueba_1.steps < course_prueba_2.steps )
+		{
+		assert(this_course.steps == course_prueba_1.steps);
+		}
+	else
+		{
+		assert(this_course.steps == course_prueba_2.steps);
+		}
+//fin test
+	if (this_course.steps < best_course->steps)
+		this_course.level = best_course
+		memcpy(best_course, &this_course, sizeof(t_course));// pasar a ft_!!!
 }
 
 
-int find_rigth_course(t_ciar *stack_a, t_ciar *stack_b ,t_course **best_course)
+//TO DO best course debe llegar inicializado, todo a 0 excepto steps, steps = MAX_INT
+
+void find_rigth_course(t_ciar *stack_a, t_ciar *stack_b ,t_course *best_course)
 {
 	t_level target_a;
 	t_level level_b;
-	t_course *this_course;
 
-	level_b = -1; // valga de momento,deberia ser 0 pero me quedo sin lineas para el ++
-	while (++level_b < stack_b->fill)
+	level_b = 0;
+	while (level_b < stack_b->fill)
 	{
 		target_a = find_place_for(stack_a, get_n_element(stack_b, level_b));
-		this_course = synch_rotation(stack_a, stack_b, target_a, level_b);
-		if (!this_course)
-			return (ERROR);
-		if (!(*best_course) || this_course->steps < (*best_course)->steps)
-		{
-			free(*best_course);
-			*best_course = this_course;
-		}
-		this_course = asynch_rotation(stack_a, stack_b, target_a, level_b);
-		if (!this_course)
-			return (ERROR);
-		if (this_course->steps < (*best_course)->steps)
-		{
-			free(*best_course);
-			*best_course = this_course;
-		}
+		synch_rotation(target_a, level_b, best_course);
+		asynch_rotation(target_a, level_b, best_course);
+		level_b++;
 	}
-	return (0);
 }
 
 
