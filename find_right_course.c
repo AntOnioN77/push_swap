@@ -20,11 +20,11 @@ t_level		find_place_for(t_ciar *stack_a, int n)
 	}
 }
 
-run_rotate(t_place deeper , t_place higher, t_course *course)
+void	run_rotate(t_place deeper , t_place higher, t_course *course)
 {
-	//to do
 	course->steps = deeper.level + 1; //+1 por el pa
-	course->rr = higher.level;
+	// TO DO arregla esto:
+	course->rr = higher.level;//que pasa en caso de que el resultado sea mayor que el numero de operaciones necesarias para hacer que higuer sobrepase el top? esto podria suceder si la pila con higher es mucho mas grande que la pila con  deeper.
 	course->rrr = 0;
 	if (deeper.stack == 'a')
 		{
@@ -42,8 +42,66 @@ run_rotate(t_place deeper , t_place higher, t_course *course)
 
 }
 
-run_reverse_rotate()
-{}
+
+/*
+void	run_reverse_rotate(t_place deeper , t_place higher, t_course *course)
+{
+	t_place near_back;
+	t_place farth_back;
+
+	if ((deeper.stack_size - deeper.level) <= (higher.stack_size - higher.level))
+		{
+			near_back = deeper;
+			farth_back = higher;
+		}
+	else
+		{
+			near_back = higher;
+			farth_back = deeper;
+		}
+
+	course->steps = 
+
+}
+*/
+
+void	rename_a_b(t_place *deeper, t_place *higher, t_place *place_a ,t_place *place_b)
+{
+	if (deeper->stack == 'a')
+	{
+		place_a = deeper;
+		place_b = higher;
+	}
+	else
+	{
+		place_a = higher;
+		place_b = deeper;
+	}
+}
+
+
+void	run_reverse_rotate(t_place deeper , t_place higher, t_course *course)
+{
+	t_place *place_a;
+	t_place *place_b;
+
+	rename_a_b(&deeper, &higher, place_a, place_b);
+	if (deeper.reverse_level > higher.reverse_level)
+		course->steps = deeper.reverse_level + 1; //+1 por pa.
+	else
+		course->steps = higher.reverse_level + 1; //+1 por pa.
+	course->rr = 0;
+	if (higher.reverse_level <= deeper.reverse_level)
+		course->rrr = higher.reverse_level;
+	else
+		course->rrr = deeper.reverse_level;
+	course->ra = 0;
+
+	if (/*TO DO*/)
+		curse->rra = //TO DO
+		
+}
+
 
 void *synch_rotation(t_place a, t_place b, t_course *best_course)
 {
