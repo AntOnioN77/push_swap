@@ -20,7 +20,10 @@ t_level		find_place_for(t_ciar *stack_a, int n)
 
 t_course *synch_rotation(stack_a, stack_b, target_a, level_b)
 {
-	return(NULL) //temporal
+	t_course *with_rr;
+	t_course *whit_rrr;
+
+	
 }
 
 
@@ -30,14 +33,14 @@ int find_rigth_course(t_ciar *stack_a, t_ciar *stack_b ,t_course **best_course)
 	t_level level_b;
 	t_course *this_course;
 
-	level_b = 0;
-	while (level_b < stack_b->fill)
+	level_b = -1; // valga de momento,deberia ser 0 pero me quedo sin lineas para el ++
+	while (++level_b < stack_b->fill)
 	{
 		target_a = find_place_for(stack_a, get_n_element(stack_b, level_b));
 		this_course = synch_rotation(stack_a, stack_b, target_a, level_b);
 		if (!this_course)
 			return (ERROR);
-		if (!best_course || this_course->steps < (*best_course)->steps)
+		if (!(*best_course) || this_course->steps < (*best_course)->steps)
 		{
 			free(*best_course);
 			*best_course = this_course;
@@ -50,7 +53,6 @@ int find_rigth_course(t_ciar *stack_a, t_ciar *stack_b ,t_course **best_course)
 			free(*best_course);
 			*best_course = this_course;
 		}
-		level_b++;
 	}
 	return (0);
 }
