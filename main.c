@@ -31,18 +31,21 @@ int main(int argc, char **argv) {
     t_course best_course;
     init_course(&best_course);
 
-    printf("Elementos en stack_a: %d\n", stack_a->fill);
-    printf("Elementos en stack_b: %d\n", stack_b->fill);
+//printf("Elementos en stack_a: %d\n", stack_a->fill);
+//printf("Elementos en stack_b: %d\n", stack_b->fill);
 
     while (stack_b->fill > 0) {
         find_rigth_course(stack_a, stack_b, &best_course);
-        printf("Best course: {steps: %d, rr: %d, rrr: %d, ra: %d, rb: %d, rra: %d, rrb: %d, pa: %d}\n",
-               best_course.steps, best_course.rr, best_course.rrr, best_course.ra, best_course.rb,
-               best_course.rra, best_course.rrb, best_course.pa);
+//printf("Best course: {steps: %d, rr: %d, rrr: %d, ra: %d, rb: %d, rra: %d, rrb: %d, pa: %d}\n",
+//    best_course.steps, best_course.rr, best_course.rrr, best_course.ra, best_course.rb,
+//    best_course.rra, best_course.rrb, best_course.pa);
         take_course(&best_course, stack_a, stack_b);
-        printf("Elementos en stack_a después de take_course: %d\n", stack_a->fill);
-        printf("Elementos en stack_b después de take_course: %d\n", stack_b->fill);
+//printf("Elementos en stack_a después de take_course: %d\n", stack_a->fill);
+//printf("Elementos en stack_b después de take_course: %d\n", stack_b->fill);
     }
-
+	while(get_top(stack_a) > get_back(stack_a))
+	{
+		ra(stack_a);
+	}
     return 0;
 }

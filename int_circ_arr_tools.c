@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:54:36 by antofern          #+#    #+#             */
-/*   Updated: 2024/08/08 16:59:48 by antofern         ###   ########.fr       */
+/*   Updated: 2024/08/09 01:15:58 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -338,7 +338,7 @@ int shorter_d(t_ciar *a, t_ciar *b)
 //GENERADO PARA PRUEBAS BORRAR
 void take_course(t_course *course, t_ciar *a, t_ciar *b)
 {
-	printf("entra en take_course\n");
+//printf("entra en take_course\n");
     if (course == NULL)
     {
         printf("Course is NULL\n");
@@ -369,15 +369,46 @@ void take_course(t_course *course, t_ciar *a, t_ciar *b)
     {
         rrb(b);
     }
-	printf("ANTES DEL PUSH\npila_a->fill== %d pila_b.>fill==%d\n", a->fill, b->fill);
+//printf("ANTES DEL PUSH\npila_a->fill== %d pila_b.>fill==%d\n", a->fill, b->fill);
 
     for (int i = 0; i < course->pa; i++)
     {
         pa(b, a);
     }
-	printf("DESPUES DEL PUSH\npila_a->fill== %d pila_b.>fill==%d\n", a->fill, b->fill);
+//printf("DESPUES DEL PUSH\npila_a->fill== %d pila_b.>fill==%d\n", a->fill, b->fill);
 }
 
+int find_bigest(t_ciar *stack)
+{
+	int i;
+	int result;
+
+	i = 0;
+	result = 0;
+	while (i < stack->fill)
+	{
+		if (get_n_element(stack, i) > result)
+			result = get_n_element(stack, i);
+		i++;
+	}
+	return (result);
+}
+
+int find_smalest(t_ciar *stack)
+{
+	int i;
+	int result;
+
+	i = 0;
+	result = 0;
+	while (i < stack->fill)
+	{
+		if (get_n_element(stack, i) < result)
+			result = get_n_element(stack, i);
+		i++;
+	}
+	return (result);
+}
 
 int main(int argc, char **argv) {
     t_ciar *stack_a;
@@ -394,26 +425,44 @@ int main(int argc, char **argv) {
     stack_b = init_ciar(argc - 1);
     fill_stack(stack_a, argc, argv);
 
+	int bigest = find_bigest(stack_a);
+	int smalest = find_smalest(stack_a);
     while (n_elementos > 2) {
+		if (get_top(stack_a) == bigest || get_top(stack_a) == smalest)
+			ra(stack_a);
         pb(stack_a, stack_b);
         n_elementos--;
     }
-
+	if (get_top(stack_a) < get_n_element(stack_a, 1))
+		sa(stack_a);
+/*
     t_course best_course;
     init_course(&best_course);
+	printf("INIT--Best course: {steps: %d, rr: %d, rrr: %d, ra: %d, rb: %d, rra: %d, rrb: %d, pa: %d}\n",
+			best_course.steps, best_course.rr, best_course.rrr, best_course.ra, best_course.rb,
+			best_course.rra, best_course.rrb, best_course.pa);
+*/
+//printf("Elementos en stack_a: %d\n", stack_a->fill);
+//printf("Elementos en stack_b: %d\n", stack_b->fill);
+//printf("stack_a{%d, %d}", get_top(stack_a), get_back(stack_a));
 
-    printf("Elementos en stack_a: %d\n", stack_a->fill);
-    printf("Elementos en stack_b: %d\n", stack_b->fill);
-
+	    t_course best_course;
     while (stack_b->fill > 0) {
+    	init_course(&best_course);
         find_rigth_course(stack_a, stack_b, &best_course);
-        printf("Best course: {steps: %d, rr: %d, rrr: %d, ra: %d, rb: %d, rra: %d, rrb: %d, pa: %d}\n",
-               best_course.steps, best_course.rr, best_course.rrr, best_course.ra, best_course.rb,
-               best_course.rra, best_course.rrb, best_course.pa);
+	//printf("Best course: {steps: %d, rr: %d, rrr: %d, ra: %d, rb: %d, rra: %d, rrb: %d, pa: %d}\n",
+	//	best_course.steps, best_course.rr, best_course.rrr, best_course.ra, best_course.rb,
+	//	best_course.rra, best_course.rrb, best_course.pa);
         take_course(&best_course, stack_a, stack_b);
-        printf("777 ___Elementos en stack_a después de take_course: %d\n", stack_a->fill);
-        printf("Elementos en stack_b después de take_course: %d\n", stack_b->fill);
+    //printf(" ___Elementos en stack_a después de take_course: %d\n", stack_a->fill);
+    //printf("Elementos en stack_b después de take_course: %d\n", stack_b->fill);
     }
+	int i = 0;//borrar
+	while (i < stack_a->fill)
+	{
+	printf("####################    %d    #####################\n", get_n_element(stack_a, i));
+		i++;
+	}
 
     return 0;
 }

@@ -8,12 +8,13 @@ t_level		find_place_for(t_ciar *stack_a, int n)
 {
 	int i;
 
+//printf("stack_a->fill: %d", stack_a->fill);
 	if (stack_a->fill == 0 || stack_a->fill == 1)
 		return (0);
 	i = 0;
 	while (i < stack_a->fill)
 	{
-		if (get_n_element(stack_a, i) >= n || get_n_element(stack_a, i-1) <= n) // el || cuestionable
+		if (get_n_element(stack_a, i) >= n && get_n_element(stack_a, i-1) <= n) // el || cuestionable
 			return(i);
 		i++;
 	}
@@ -206,16 +207,20 @@ t_place init_place(t_ciar *stack, t_level level, char stack_name)
 {
     t_place new_place;
 
-	printf("stack %c, fill %d\n", stack_name, stack->fill );
+
     new_place.stack_name = stack_name;
     new_place.level = level;
     new_place.middel_of_stack = stack->fill / 2;
-	printf("middel %d\n", new_place.middel_of_stack );
+
     new_place.stack_size = stack->fill;
 	if (level == 0)
 		new_place.reverse_level = 0;
 	else
     	new_place.reverse_level = stack->fill - level;
+//printf("stack %c, fill %d\n", stack_name, stack->fill );
+//printf("stack %c, level: %d\n", stack_name, level);
+//printf("middel %d\n", new_place.middel_of_stack );
+//printf("reverse level: %d\n", new_place.reverse_level);
     return new_place;
 }
 
@@ -231,6 +236,7 @@ void find_rigth_course(t_ciar *stack_a, t_ciar *stack_b ,t_course *best_course)
 	while (level_b < stack_b->fill)
 	{
 		level_a = find_place_for(stack_a, get_n_element(stack_b, level_b));
+//printf("---el numero en el nivel B-%d, se coloca en el nivel A-%d----\n", level_b, level_a);
 		position_in_a = init_place(stack_a, level_a, 'a');
 		position_in_b = init_place(stack_b, level_b, 'b');
 		synch_rotation(position_in_a, position_in_b, best_course);
