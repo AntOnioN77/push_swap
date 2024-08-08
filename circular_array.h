@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:01:26 by antofern          #+#    #+#             */
-/*   Updated: 2024/08/07 17:16:00 by antofern         ###   ########.fr       */
+/*   Updated: 2024/08/08 10:55:45 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct s_ciar
 typedef int t_level;
 typedef struct s_place
 {
-	char	stack;
+	char	stack_name;
 	t_level	level;
 	int		middel_of_stack;
 	int		stack_size;

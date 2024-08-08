@@ -20,18 +20,18 @@ t_level		find_place_for(t_ciar *stack_a, int n)
 	}
 }
 
-void	run_rotate(t_place deeper , t_place higher, t_course *course)
+void	run_sync_rotate(t_place deeper , t_place higher, t_course *course)
 {
 	course->steps = deeper.level + 1; //+1 por el pa
 	// TO DO arregla esto:
 	course->rr = higher.level;//que pasa en caso de que el resultado sea mayor que el numero de operaciones necesarias para hacer que higuer sobrepase el top? esto podria suceder si la pila con higher es mucho mas grande que la pila con  deeper.
 	course->rrr = 0;
-	if (deeper.stack == 'a')
+	if (deeper.stack_name == 'a')
 		{
 			course->ra = deeper.level - higher.level;
 			course->rb = 0;
 		}
-	if (deeper.stack == 'b')
+	if (deeper.stack_name == 'b')
 	{
 			course->rb = deeper.level - higher.level;
 			course->ra = 0;
@@ -65,27 +65,27 @@ void	run_reverse_rotate(t_place deeper , t_place higher, t_course *course)
 }
 */
 
-void	rename_a_b(t_place *deeper, t_place *higher, t_place *place_a ,t_place *place_b)
+//no separar esta función de run reverse_rotate
+static void	rename_a_b(t_place *deeper, t_place *higher, t_place **place_a ,t_place **place_b)
 {
-	if (deeper->stack == 'a')
+	if (deeper->stack_name == 'a')
 	{
-		place_a = deeper;
-		place_b = higher;
+		*place_a = deeper;
+		*place_b = higher;
 	}
 	else
 	{
-		place_a = higher;
-		place_b = deeper;
+		*place_a = higher;
+		*place_b = deeper;
 	}
 }
 
-
-void	run_reverse_rotate(t_place deeper , t_place higher, t_course *course)
+void	run_sync_reverse_rotate(t_place deeper , t_place higher, t_course *course)
 {
 	t_place *place_a;
 	t_place *place_b;
 
-	rename_a_b(&deeper, &higher, place_a, place_b);
+	rename_a_b(&deeper, &higher, &place_a, &place_b);
 	if (deeper.reverse_level > higher.reverse_level)
 		course->steps = deeper.reverse_level + 1; //+1 por pa.
 	else
@@ -96,11 +96,18 @@ void	run_reverse_rotate(t_place deeper , t_place higher, t_course *course)
 	else
 		course->rrr = deeper.reverse_level;
 	course->ra = 0;
-
-	if (/*TO DO*/)
-		curse->rra = //TO DO
-		
+	if (place_a->reverse_level > place_b->reverse_level)
+	{
+		course->rra = place_a->reverse_level - place_b->reverse_level;
+		course->rrb = 0;
+	}
+	else
+	{
+		course->rra = 0;
+		course->rrb = place_b->reverse_level - place_a->reverse_level;
+	}
 }
+
 
 
 void *synch_rotation(t_place a, t_place b, t_course *best_course)
@@ -121,13 +128,13 @@ void *synch_rotation(t_place a, t_place b, t_course *best_course)
 		higher = a;
 	}
 	if (higher.level <= higher.middel_of_stack) // parece buena para otro fin (&& (deeper.level - higher.level) <= deeper.middel_of_stack)
-		run_rotate(deeper, higher, &this_course);
+		run_sync_rotate(deeper, higher, &this_course);
 	else
 		run_reverse_rotate(deeper, higher, &this_course);
 //test borrar lineas siguientes
 	t_course course_prueba_1;
 	t_course course_prueba_2;
-	run_rotate(deeper, higher, &course_prueba_1);
+	run_sync_rotate(deeper, higher, &course_prueba_1);
 	run_reverse_rotate(deeper, higher, &course_prueba_2);
 	if (course_prueba_1.steps < course_prueba_2.steps )
 		{
@@ -142,20 +149,48 @@ void *synch_rotation(t_place a, t_place b, t_course *best_course)
 		memcpy(best_course, &this_course, sizeof(t_course));// pasar a ft_!!!
 }
 
+asynch_rotation(t_place position_in_a, t_place position_in_b, t_course best_course)
+{
+	t_course this_course;
+
+	if (position_in_a.middel_of_stack >= position_in_a.level)
+		run_rotate(this_course, position_in_a, 0);
+		run_reverse_rotate(this_course, position_in_b, this_course.steps);
+	else
+
+}
+
+t_place init_place(t_ciar *stack, t_level level, char stack_name)
+{
+    t_place new_place;
+
+    new_place.stack_name = stack_name;
+    new_place.level = level;
+    new_place.middel_of_stack = stack->fill / 2;
+    new_place.stack_size = stack->fill;
+	if (level == 0)
+		new_place.reverse_level = 0;
+	else
+    	new_place.reverse_level = stack->fill - level;
+    return new_place;
+}
 
 //TO DO best course debe llegar inicializado, todo a 0 excepto steps, steps = MAX_INT
-
 void find_rigth_course(t_ciar *stack_a, t_ciar *stack_b ,t_course *best_course)
 {
-	t_level target_a;
+	t_level level_a;
 	t_level level_b;
+	t_place	position_in_a;
+	t_place	position_in_b;
 
 	level_b = 0;
 	while (level_b < stack_b->fill)
 	{
-		target_a = find_place_for(stack_a, get_n_element(stack_b, level_b));
-		synch_rotation(target_a, level_b, best_course);
-		asynch_rotation(target_a, level_b, best_course);
+		level_a = find_place_for(stack_a, get_n_element(stack_b, level_b));
+		position_in_a = init_place(stack_a, level_a, 'a');
+		position_in_b = init_place(stack_b, level_b, 'b');
+		synch_rotation(position_in_a, position_in_b, best_course);
+		asynch_rotation(position_in_a, position_in_b, best_course);
 		level_b++;
 	}
 }
