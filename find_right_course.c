@@ -20,6 +20,7 @@ t_level		find_place_for(t_ciar *stack_a, int n)
 	}
 }
 
+//no separar esta funcion de sync_rotation()
 void	run_sync_rotate(t_place deeper , t_place higher, t_course *course)
 {
 	course->steps = deeper.level + 1; //+1 por el pa
@@ -80,7 +81,8 @@ static void	rename_a_b(t_place *deeper, t_place *higher, t_place **place_a ,t_pl
 	}
 }
 
-void	run_sync_reverse_rotate(t_place deeper , t_place higher, t_course *course)
+//no separar esta funcion de sync_rotation()
+static void	run_sync_reverse_rotate(t_place deeper , t_place higher, t_course *course)
 {
 	t_place *place_a;
 	t_place *place_b;
@@ -108,8 +110,6 @@ void	run_sync_reverse_rotate(t_place deeper , t_place higher, t_course *course)
 	}
 }
 
-
-
 void *synch_rotation(t_place a, t_place b, t_course *best_course)
 {
 	t_place deeper;
@@ -130,12 +130,12 @@ void *synch_rotation(t_place a, t_place b, t_course *best_course)
 	if (higher.level <= higher.middel_of_stack) // parece buena para otro fin (&& (deeper.level - higher.level) <= deeper.middel_of_stack)
 		run_sync_rotate(deeper, higher, &this_course);
 	else
-		run_reverse_rotate(deeper, higher, &this_course);
+		run_sync_reverse_rotate(deeper, higher, &this_course);
 //test borrar lineas siguientes
 	t_course course_prueba_1;
 	t_course course_prueba_2;
 	run_sync_rotate(deeper, higher, &course_prueba_1);
-	run_reverse_rotate(deeper, higher, &course_prueba_2);
+	run_sync_reverse_rotate(deeper, higher, &course_prueba_2);
 	if (course_prueba_1.steps < course_prueba_2.steps )
 		{
 		assert(this_course.steps == course_prueba_1.steps);
@@ -149,15 +149,50 @@ void *synch_rotation(t_place a, t_place b, t_course *best_course)
 		memcpy(best_course, &this_course, sizeof(t_course));// pasar a ft_!!!
 }
 
-asynch_rotation(t_place position_in_a, t_place position_in_b, t_course best_course)
+//no separar de async_rotation
+static void	run_rotate(t_course *course, t_place position)
+{
+	course->steps += position.level;
+	if (position.stack_name == 'a')
+		course->ra = position.level;
+	if (position.stack_name == 'b')
+		course->rb = position.level;
+}
+
+//no separar de async_rotation
+static void	run_reverse_rotate(t_course *course, t_place position)
+{
+	course->steps += position.reverse_level;
+	if (position.stack_name == 'a')
+		course->rra = position.reverse_level;
+	if (position.stack_name == 'b')
+		course->rrb = position.reverse_level;
+}
+
+asynch_rotation(t_place position_in_a, t_place position_in_b, t_course *best_course)
 {
 	t_course this_course;
-
+	
+	this_course.pa = 1;
+	this_course.rr = 0;
+	this_course.rrr = 0;
+	this_course.steps = 0;
+	this_course.ra = 0;
+	this_course.rb = 0;
+	this_course.rra = 0;
+	this_course.rrb = 0;
 	if (position_in_a.middel_of_stack >= position_in_a.level)
-		run_rotate(this_course, position_in_a, 0);
-		run_reverse_rotate(this_course, position_in_b, this_course.steps);
+	{
+		run_rotate(&this_course, position_in_a);
+		run_reverse_rotate(&this_course, position_in_b);
+	}
 	else
-
+	{
+		run_reverse_rotate(&this_course, position_in_a);
+		run_rotate(&this_course, position_in_b);
+	}
+	if (this_course.steps < best_course->steps)
+		memcpy(best_course, &this_course, sizeof(t_course));// pasar a ft_!!!
 }
 
 t_place init_place(t_ciar *stack, t_level level, char stack_name)
