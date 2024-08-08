@@ -6,7 +6,7 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:54:36 by antofern          #+#    #+#             */
-/*   Updated: 2024/08/07 11:22:33 by antofern         ###   ########.fr       */
+/*   Updated: 2024/08/08 16:59:48 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -335,26 +335,85 @@ int shorter_d(t_ciar *a, t_ciar *b)
 	return (0);
 }
 */
-
-
-
-
-int	main(int argc, char **argv)
+//GENERADO PARA PRUEBAS BORRAR
+void take_course(t_course *course, t_ciar *a, t_ciar *b)
 {
-	t_ciar *stack_a;
-	t_ciar *stack_b;
+	printf("entra en take_course\n");
+    if (course == NULL)
+    {
+        printf("Course is NULL\n");
+        return;
+    }
 
-	//validar datos de entrada
+    for (int i = 0; i < course->rr; i++)
+    {
+        rr(a,b);
+    }
+    for (int i = 0; i < course->rrr; i++)
+    {
+        rrr(a,b);
+    }
+    for (int i = 0; i < course->ra; i++)
+    {
+        ra(a);
+    }
+    for (int i = 0; i < course->rb; i++)
+    {
+        rb(b);
+    }
+    for (int i = 0; i < course->rra; i++)
+    {
+        rra(a);
+    }
+    for (int i = 0; i < course->rrb; i++)
+    {
+        rrb(b);
+    }
+	printf("ANTES DEL PUSH\npila_a->fill== %d pila_b.>fill==%d\n", a->fill, b->fill);
 
-	stack_a = init_ciar(argc - 1);
-	stack_b = init_ciar(argc - 1);
-	fill_stack(stack_a, argc, argv);
+    for (int i = 0; i < course->pa; i++)
+    {
+        pa(b, a);
+    }
+	printf("DESPUES DEL PUSH\npila_a->fill== %d pila_b.>fill==%d\n", a->fill, b->fill);
+}
 
-	//ra(stack_a);
-	//ra(stack_a);
-	//ra(stack_a);
 
-	printf("%d\n", get_n_element(stack_a, -1));
+int main(int argc, char **argv) {
+    t_ciar *stack_a;
+    t_ciar *stack_b;
+    int n_elementos = argc - 1;
 
-	return (0);
+    // Validar datos de entrada
+    if (argc < 2) {
+        fprintf(stderr, "Uso: %s <elementos>\n", argv[0]);
+        return 1;
+    }
+
+    stack_a = init_ciar(argc - 1);
+    stack_b = init_ciar(argc - 1);
+    fill_stack(stack_a, argc, argv);
+
+    while (n_elementos > 2) {
+        pb(stack_a, stack_b);
+        n_elementos--;
+    }
+
+    t_course best_course;
+    init_course(&best_course);
+
+    printf("Elementos en stack_a: %d\n", stack_a->fill);
+    printf("Elementos en stack_b: %d\n", stack_b->fill);
+
+    while (stack_b->fill > 0) {
+        find_rigth_course(stack_a, stack_b, &best_course);
+        printf("Best course: {steps: %d, rr: %d, rrr: %d, ra: %d, rb: %d, rra: %d, rrb: %d, pa: %d}\n",
+               best_course.steps, best_course.rr, best_course.rrr, best_course.ra, best_course.rb,
+               best_course.rra, best_course.rrb, best_course.pa);
+        take_course(&best_course, stack_a, stack_b);
+        printf("777 ___Elementos en stack_a después de take_course: %d\n", stack_a->fill);
+        printf("Elementos en stack_b después de take_course: %d\n", stack_b->fill);
+    }
+
+    return 0;
 }

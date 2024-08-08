@@ -1,23 +1,30 @@
 #include <assert.h> //borrar, es de prueba
-
-
-
+#include <string.h> //borrar
+#include <stdio.h> //borrar
+#include <limits.h>
 #include "circular_array.h"
 
 t_level		find_place_for(t_ciar *stack_a, int n)
 {
 	int i;
 
-
 	if (stack_a->fill == 0 || stack_a->fill == 1)
 		return (0);
 	i = 0;
 	while (i < stack_a->fill)
 	{
-		if (get_n_element(i) > n && get_n_element(i-1) < n)
+		if (get_n_element(stack_a, i) >= n || get_n_element(stack_a, i-1) <= n) // el || cuestionable
 			return(i);
 		i++;
 	}
+	assert(0);//no deberia llegar nunca
+	return (0);
+}
+
+void init_course(t_course *course)
+{
+	memset(course, 0, sizeof(t_course));
+	course->steps = INT_MAX;
 }
 
 //no separar esta funcion de sync_rotation()
@@ -40,7 +47,7 @@ void	run_sync_rotate(t_place deeper , t_place higher, t_course *course)
 	course->rra = 0;
 	course->rrb = 0;
 	course->pa	= 1;
-
+	//course->level =
 }
 
 
@@ -110,7 +117,7 @@ static void	run_sync_reverse_rotate(t_place deeper , t_place higher, t_course *c
 	}
 }
 
-void *synch_rotation(t_place a, t_place b, t_course *best_course)
+void synch_rotation(t_place a, t_place b, t_course *best_course)
 {
 	t_place deeper;
 	t_place higher;
@@ -131,7 +138,7 @@ void *synch_rotation(t_place a, t_place b, t_course *best_course)
 		run_sync_rotate(deeper, higher, &this_course);
 	else
 		run_sync_reverse_rotate(deeper, higher, &this_course);
-//test borrar lineas siguientes
+/*//test borrar lineas siguientes
 	t_course course_prueba_1;
 	t_course course_prueba_2;
 	run_sync_rotate(deeper, higher, &course_prueba_1);
@@ -144,7 +151,7 @@ void *synch_rotation(t_place a, t_place b, t_course *best_course)
 		{
 		assert(this_course.steps == course_prueba_2.steps);
 		}
-//fin test
+//fin test*/
 	if (this_course.steps < best_course->steps)
 		memcpy(best_course, &this_course, sizeof(t_course));// pasar a ft_!!!
 }
@@ -169,7 +176,7 @@ static void	run_reverse_rotate(t_course *course, t_place position)
 		course->rrb = position.reverse_level;
 }
 
-asynch_rotation(t_place position_in_a, t_place position_in_b, t_course *best_course)
+void	asynch_rotation(t_place position_in_a, t_place position_in_b, t_course *best_course)
 {
 	t_course this_course;
 	
@@ -199,9 +206,11 @@ t_place init_place(t_ciar *stack, t_level level, char stack_name)
 {
     t_place new_place;
 
+	printf("stack %c, fill %d\n", stack_name, stack->fill );
     new_place.stack_name = stack_name;
     new_place.level = level;
     new_place.middel_of_stack = stack->fill / 2;
+	printf("middel %d\n", new_place.middel_of_stack );
     new_place.stack_size = stack->fill;
 	if (level == 0)
 		new_place.reverse_level = 0;
@@ -228,26 +237,11 @@ void find_rigth_course(t_ciar *stack_a, t_ciar *stack_b ,t_course *best_course)
 		asynch_rotation(position_in_a, position_in_b, best_course);
 		level_b++;
 	}
+
 }
 
 
-/*Con giro sincrono (rr)
-	rotando = mayor distancia al top
-		rr = menor distancia al top,
-		ra = (distancia de a al top) - (distancia de b al top), si es negativa  setear a 0;
-		rb = (distancia de b al top) - (distancia de a al top), si es negativa  setear a 0;
-	rotando inversamente = mayor distancia al top con %(...)
-		(...)
-	pasos totales = elegir la menor;
-con giro asincrono
-	rra = si tier >= (sice list /2) = size_list (+1?) - tier
-	ra = si tier < (sice list /2) = tier;
-	calcular para b tambien
-	pasos totales = pasos de a + pasos de b;
 
-se almacena solo el mejor
-	en un struct que debe tener los pasos totales la posición (tier) al que corresponde y los pasos que dé de cada rr rrr ra rb rra rrb pa.
-	*/
 
 
 /* otras ideas.

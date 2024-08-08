@@ -6,9 +6,12 @@
 /*   By: antofern <antofern@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:01:26 by antofern          #+#    #+#             */
-/*   Updated: 2024/08/08 10:55:45 by antofern         ###   ########.fr       */
+/*   Updated: 2024/08/08 16:09:10 by antofern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef CIRCULAR_ARRAY_H
+#define CIRCULAR_ARRAY_H
 
 typedef struct s_ciar
 {
@@ -73,3 +76,16 @@ void rrr(t_ciar *a, t_ciar *b);
 int fill_stack(t_ciar *arr, int argc, char **argv);
 void	free_ciar(t_ciar *arr);
 int get_level(t_ciar *arr, int index);
+int get_n_element(const t_ciar *arr, t_level level);
+
+t_level		find_place_for(t_ciar *stack_a, int n);
+void	run_sync_rotate(t_place deeper , t_place higher, t_course *course);
+void synch_rotation(t_place a, t_place b, t_course *best_course);
+void	asynch_rotation(t_place position_in_a, t_place position_in_b, t_course *best_course);
+t_place init_place(t_ciar *stack, t_level level, char stack_name);
+void find_rigth_course(t_ciar *stack_a, t_ciar *stack_b ,t_course *best_course);
+void init_course(t_course *course);
+
+void take_course(t_course *course, t_ciar *a, t_ciar *b);// BORRAESTO
+
+#endif /* CIRCULAR_ARRAY_H */
